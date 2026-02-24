@@ -1,0 +1,234 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Lora&display=swap');
+
+:root {
+  --bg:           #08081a;
+  --bg-surface:   #0e0e2a;
+  --gold:         #c8921a;
+  --gold-bright:  #e8b840;
+  --purple:       #9030a0;
+  --purple-bright:#c050d8;
+  --text:         #c8b89a;
+  --text-dim:     #6a5a4a;
+  --border:       #1e1e48;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'VT323', monospace;
+  font-size: 22px;
+  line-height: 1.7;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* ── Header ── */
+
+header {
+  border-bottom: 2px solid var(--gold);
+  padding-bottom: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+header h1 {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.4rem;
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+}
+
+header h1 a {
+  color: var(--gold-bright);
+  text-decoration: none;
+}
+
+header h1 a:hover {
+  color: var(--purple-bright);
+}
+
+.tagline {
+  color: var(--text-dim);
+  font-size: 1rem;
+}
+
+/* ── Navigation ── */
+
+nav {
+  margin-top: 0.75rem;
+}
+
+nav a {
+  color: var(--purple-bright);
+  text-decoration: none;
+  margin-right: 1.5rem;
+  font-size: 1rem;
+}
+
+nav a:hover {
+  color: var(--gold-bright);
+}
+
+/* ── Post list (index page) ── */
+
+.post-list {
+  list-style: none;
+}
+
+.post-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.post-list li:first-child {
+  border-top: 1px solid var(--border);
+}
+
+.post-date {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.post-list a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.post-list a:hover {
+  color: var(--gold-bright);
+}
+
+/* ── Post page ── */
+
+article header {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 1.5rem;
+}
+
+article header h1 {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--gold-bright);
+}
+
+.post-meta {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.post-body {
+  margin-top: 2rem;
+  font-family: 'Lora', serif;
+  font-size: 1.15rem;
+  line-height: 1.8;
+}
+
+.post-body h2 {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.75rem;
+  color: var(--purple-bright);
+  line-height: 1.8;
+  margin: 2.5rem 0 1rem;
+}
+
+.post-body h3 {
+  color: var(--gold);
+  margin: 2rem 0 0.75rem;
+}
+
+.post-body p {
+  margin-bottom: 1.2rem;
+}
+
+.post-body a {
+  color: var(--gold-bright);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.post-body a:hover {
+  color: var(--purple-bright);
+}
+
+.post-body ul,
+.post-body ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.post-body li {
+  margin-bottom: 0.4rem;
+}
+
+.post-body code {
+  font-family: 'VT323', monospace;
+  background: var(--bg-surface);
+  color: var(--gold);
+  padding: 0.1em 0.4em;
+  border: 1px solid var(--border);
+}
+
+.post-body pre {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gold);
+  padding: 1rem 1.2rem;
+  overflow-x: auto;
+  margin-bottom: 1.2rem;
+}
+
+.post-body pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--text);
+}
+
+.post-body blockquote {
+  border-left: 3px solid var(--purple);
+  padding-left: 1.2rem;
+  color: var(--text-dim);
+  margin: 0 0 1.2rem;
+}
+
+/* ── Back link ── */
+
+.back {
+  display: inline-block;
+  color: var(--purple-bright);
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+}
+
+.back:hover {
+  color: var(--gold-bright);
+}
+
+.back::before {
+  content: '← ';
+}
+
+/* ── Footer ── */
+
+footer {
+  border-top: 2px solid var(--gold);
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}

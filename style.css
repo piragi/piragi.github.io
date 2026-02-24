@@ -12,6 +12,18 @@
   --border:       #1e1e48;
 }
 
+[data-theme="light"] {
+  --bg:           #f4edd8;
+  --bg-surface:   #ece4cc;
+  --gold:         #a06800;
+  --gold-bright:  #c08010;
+  --purple:       #6020a0;
+  --purple-bright:#8030c0;
+  --text:         #2c2010;
+  --text-dim:     #8c7a58;
+  --border:       #d0c0a0;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -32,6 +44,7 @@ body {
 /* ── Header ── */
 
 header {
+  position: relative;
   border-bottom: 2px solid var(--gold);
   padding-bottom: 1.5rem;
   margin-bottom: 2.5rem;
@@ -72,6 +85,23 @@ nav a {
 }
 
 nav a:hover {
+  color: var(--gold-bright);
+}
+
+#theme-toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: none;
+  border: none;
+  color: var(--purple-bright);
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+#theme-toggle:hover {
   color: var(--gold-bright);
 }
 

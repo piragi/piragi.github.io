@@ -5,17 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>piragi</title>
   <link rel="stylesheet" href="style.css">
+  <script>if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');</script>
 </head>
-<body>
+<body data-base="">
 
-  <header>
-    <h1><a href="index.html">piragi</a></h1>
-    <p class="tagline">thoughts, notes, and things</p>
-    <nav>
-      <a href="index.html">posts</a>
-      <a href="about.html">about</a>
-    </nav>
-  </header>
+  <header></header>
 
   <main>
     <ul class="post-list">
@@ -26,9 +20,8 @@
     </ul>
   </main>
 
-  <footer>
-    <p>piragi &mdash; 2026</p>
-  </footer>
+  <footer></footer>
 
+  <script src="components.js"></script>
 </body>
 </html>

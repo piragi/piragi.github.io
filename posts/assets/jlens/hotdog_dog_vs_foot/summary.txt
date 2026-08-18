@@ -1,0 +1,39 @@
+image: data/prepared/imagenet/val/class_200/img_048942.JPEG
+true class: Tibetan terrier (idx 200)
+predicted class: hotdog (idx 934)
+
+dog patches [8, 9, 10, 17]:
+  JLens ranks of predicted class 'hotdog': [331, 224, 349, 222] (mean 281.5)
+  JLens ranks of runner_up class 'Tibetan terrier': [1, 1, 1, 2] (mean 1.2)
+  JLens ranks of true class 'Tibetan terrier': [1, 1, 1, 2] (mean 1.2)
+  mean attribution: 0.0388
+
+  Top-10 aggregate classes for dog (mean score over group):
+     1. Tibetan terrier                +0.422 (RUNNER-UP)
+     2. Shih-Tzu                       +0.385
+     3. affenpinscher                  +0.347
+     4. Japanese spaniel               +0.340
+     5. Old English sheepdog           +0.340
+     6. English springer               +0.314
+     7. Pekinese                       +0.313
+     8. cocker spaniel                 +0.309
+     9. English setter                 +0.307
+    10. Sealyham terrier               +0.302
+
+foot patches [37, 38, 39, 44, 45]:
+  JLens ranks of predicted class 'hotdog': [1, 2, 37, 4, 1] (mean 9.0)
+  JLens ranks of runner_up class 'Tibetan terrier': [225, 113, 279, 266, 186] (mean 213.8)
+  JLens ranks of true class 'Tibetan terrier': [225, 113, 279, 266, 186] (mean 213.8)
+  mean attribution: 0.0866
+
+  Top-10 aggregate classes for foot (mean score over group):
+     1. hotdog                         +0.300 (PRED)
+     2. butternut squash               +0.271
+     3. Band Aid                       +0.251
+     4. rubber eraser                  +0.232
+     5. chiton                         +0.214
+     6. flatworm                       +0.213
+     7. clog                           +0.213
+     8. mitten                         +0.202
+     9. ice lolly                      +0.200
+    10. stretcher                      +0.197

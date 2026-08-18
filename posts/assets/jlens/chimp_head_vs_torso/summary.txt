@@ -1,0 +1,39 @@
+image: data/prepared/imagenet/val/class_367/img_036330.JPEG
+true class: chimpanzee (idx 367)
+predicted class: chimpanzee (idx 367)
+
+head patches [9, 10, 17]:
+  JLens ranks of predicted class 'chimpanzee': [3, 1, 3] (mean 2.3)
+  JLens ranks of runner_up class 'baboon': [16, 8, 10] (mean 11.3)
+  JLens ranks of true class 'chimpanzee': [3, 1, 3] (mean 2.3)
+  mean attribution: 0.0597
+
+  Top-10 aggregate classes for head (mean score over group):
+     1. chimpanzee                     +0.257 (PRED)
+     2. macaque                        +0.229
+     3. three-toed sloth               +0.213
+     4. hippopotamus                   +0.212
+     5. gorilla                        +0.212
+     6. baboon                         +0.208 (RUNNER-UP)
+     7. howler monkey                  +0.208
+     8. colobus                        +0.205
+     9. giant schnauzer                +0.202
+    10. orangutan                      +0.200
+
+torso patches [16, 23, 24, 30, 31, 38]:
+  JLens ranks of predicted class 'chimpanzee': [6, 9, 6, 17, 7, 5] (mean 8.3)
+  JLens ranks of runner_up class 'baboon': [9, 11, 1, 9, 14, 11] (mean 9.2)
+  JLens ranks of true class 'chimpanzee': [6, 9, 6, 17, 7, 5] (mean 8.3)
+  mean attribution: 0.0369
+
+  Top-10 aggregate classes for torso (mean score over group):
+     1. howler monkey                  +0.363
+     2. siamang                        +0.340
+     3. gorilla                        +0.335
+     4. chimpanzee                     +0.315 (PRED)
+     5. gibbon                         +0.312
+     6. three-toed sloth               +0.312
+     7. baboon                         +0.311 (RUNNER-UP)
+     8. American black bear            +0.310
+     9. spider monkey                  +0.308
+    10. sloth bear                     +0.299

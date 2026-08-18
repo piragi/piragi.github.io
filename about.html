@@ -1,24 +1,59 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About &mdash; piragi</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="About piragi and this small corner of the internet.">
+  <meta name="theme-color" content="#080817">
+  <title>About — piragi</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&amp;family=Press+Start+2P&amp;family=VT323&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <script>if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');</script>
+  <script src="site.js"></script>
 </head>
-<body data-base="">
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
 
-  <header></header>
+  <header class="site-header">
+    <div class="header-top">
+      <a class="brand" href="index.html" aria-label="piragi, home">
+        <span>piragi</span>
+      </a>
 
-  <main>
-    <div class="post-body">
-      <p>More soon.</p>
+      <button class="theme-toggle" type="button" aria-label="Use light theme" title="Use light theme">
+        <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="3.5"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path>
+        </svg>
+        <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20.4 14.6A8.5 8.5 0 0 1 9.4 3.6 8.5 8.5 0 1 0 20.4 14.6Z"></path>
+        </svg>
+      </button>
+    </div>
+
+    <p class="tagline">thoughts, notes, and things</p>
+
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="index.html">posts</a>
+      <a href="about.html" aria-current="page">about</a>
+    </nav>
+  </header>
+
+  <main class="site-main" id="main-content">
+    <section class="page-intro about-intro" aria-labelledby="page-title">
+      <h1 id="page-title">A small corner of the internet.</h1>
+    </section>
+
+    <div class="post-body about-body">
+      <p>Hi, I’m piragi. This is where I write through ideas, share things I’m working on, and keep notes I’ll want to find again.</p>
+
+      <p>There isn’t a strict theme. The only rule is that each post should leave an idea clearer than I found it.</p>
+
+      <p>The site is deliberately small: plain HTML, one stylesheet, and a little JavaScript for themes and mathematical notation. Its look borrows from <cite>Eye of the Beholder</cite>, the first game I ever played.</p>
     </div>
   </main>
 
-  <footer></footer>
-
-  <script src="components.js"></script>
 </body>
 </html>

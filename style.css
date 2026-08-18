@@ -250,7 +250,7 @@ a {
   align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.15rem;
 }
 
 .site-main > section + section {
@@ -263,7 +263,7 @@ a {
   color: var(--gold-bright);
   font-family: var(--display);
   font-size: 0.72rem;
-  line-height: 1.6;
+  line-height: 1.2;
   text-transform: uppercase;
 }
 
@@ -288,14 +288,14 @@ a {
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 2rem;
   align-items: center;
-  margin-inline: -1rem;
-  padding: 0.75rem 1rem;
+  margin-inline: -0.85rem;
+  padding: 0.45rem 0.85rem;
   text-decoration: none;
   transition: background-color 150ms ease, padding-left 150ms ease;
 }
 
 .post-link:hover {
-  padding-left: 1.25rem;
+  padding-left: 1.1rem;
   background: var(--surface-hover);
 }
 
@@ -307,6 +307,7 @@ a {
 .post-title {
   color: var(--text-strong);
   font-size: 1.15rem;
+  line-height: 1.25;
 }
 
 .post-title::after {
@@ -339,11 +340,12 @@ a {
 
 .pub-list li {
   border-bottom: 1px solid var(--border);
-  padding: 0.6rem 0;
+  padding: 0.4rem 0;
 }
 
 .pub-title {
   margin: 0;
+  line-height: 1.25;
 }
 
 .pub-title a {
@@ -360,9 +362,10 @@ a {
 }
 
 .pub-meta {
-  margin: 0.35rem 0 0;
+  margin: 0.2rem 0 0;
   color: var(--text-dim);
   font-size: 0.9rem;
+  line-height: 1.35;
 }
 
 .pub-meta a {

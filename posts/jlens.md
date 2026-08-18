@@ -1,25 +1,25 @@
-# JLens Vectors allow insights into attribution
+# Using JLens to Explain Vision Transformer Attributions
 
-The JLens, as introduced by Anthropic, can be viewed as a principled continuation of the logit lens together with an underlying framework for interpreting what these JLens vectors uncover. I have adapted the JLens vectors from the LLM setting into ViTs, in order to better understand attributions generated for classifications. An attribution is a heatmap, generated after an image classification, which shows which parts of the image were more or less relevant to the final classification. There have already been approaches to use JLens for ViTs (lesswrong post), but here we try to use its semantic readout to understand not only which parts of an image were important, but also to form a more informed hypothesis about why they were important.
-
-By applying the JLens vectors to ViTs and their attributions, we found some interesting insights:
-
-- once fitted, this seems like a cheap method of introspection, requiring only a matrix multiplication for each new activation
-- evidence that patch tokens contain both locally structured and globally mixed information
-- informational enrichment for conventional attributions
-
-## Attributions in Vision Transformers
-Explainability has been a topic of great significance for many years already. Especially attributions in vision models are one type of explainability (or what we would call interpretability nowadays) that have been around for quite some time. When a vision model takes in an image and outputs a classification, as is the case with Vision Transformers, we would like to understand what part of the image plays a more (or less) significant role to the final decision in the classification process. Attributions are generating heatmaps, made up from attribution values, highlighting regions with more impact with a more red color (higher attribution value) compared to regions with lower impact (blue color).
-[Example image of an attribtuion with some underlying text, probably use one from the paper]
+Explaining how an image classification came to be is an old problem. One way to go about it is to generate attribution maps, which are heatmaps highlighting areas contributing a lot (red) or very little (blue). With that we gain important understanding; what part of the image is important? But it leaves two important questions unanswered. What concept(s) is it, the model understands at that part of the image? And how does this part of the image contribute to the final prediction?
 
 <figure>
   <img src="assets/jlens/badger-transmm-attribution.png" alt="Vanilla TransMM attribution heatmap over an image of a badger and an otter, with the normalized attribution scale on the right.">
   <figcaption>Figure 1. Vanilla TransMM attribution for the predicted class, badger, with its normalized attribution scale. From Šula et al. <a href="#ref-sula">[2]</a>.</figcaption>
 </figure>
 
+There are several methods to try to get to an answer on one of the questions; what concepts a model internally uses at different parts of an image. Logit lens, linear probes, sparse autoencoders to name a few. All of them with different advantages and disadvantages. Recently, a new method called JLens by Anthropic was published which adds one more method trying to answer that question. In this post I examine how well JLens is suited to help explain attributions from a CLIP model specifically. This uncovered a few promising directions:
+
+- Consistent correlation between JLens interpretations and attribution values. 
+- Evidence that patch tokens contain both locally structured and globally mixed information (I think this claim needs more backup)
+- Informational enrichment for conventional attributions (Not sure about that)
+- Once the JLens is fitted, this seems like a cheap method of introspection requiring only a matrix multiplication for each new activation
+- JLens and logit lens relate to attribution in opposite directions
+
+## Attributions in Vision Transformers
+Explainability has been a topic of great significance for many years already. Especially attributions in vision models are one type of explainability (or what we would call interpretability nowadays) that have been around for quite some time. When a vision model takes in an image and outputs a classification, as is the case with Vision Transformers, we would like to understand what part of the image plays a more (or less) significant role to the final decision in the classification process. Attributions are generating heatmaps, made up from attribution values, highlighting regions with more impact with a more red color (higher attribution value) compared to regions with lower impact (blue color).
+
 Introduced by Chefer et al., TransMM is one of the methods producing these attribution images building upon a fairly simple concept which is what makes it so powerful in my opinion. Compute the gradients of the attention maps and multiply them with their activations. To get a single token by token map, average across all the heads per layer. Additively propagate the scaled attention maps. At the end, you extract the first row which has one value per token for the final classification token. This is going to be your attribution map.
 [[1]](#ref-chefer)
-[2 formulas, first is the gradient times activations averaged, then the propagation.]
 
 $$
 \bar{\mathbf{A}}^{(\ell)}
@@ -47,16 +47,13 @@ $$
 
 This works fairly well, measured under different faithfulness metrics such as SaCo, Faithfulness Correlation, and Pixel Flipping, but it leaves one of the most important questions on the table. Not only what part of the image was important, but WHY was it important? We can only make educated guesses with these methods. In my own research, I have tried to answer the question behind why through the integration of a Sparse Autoencoder (SAE). I designed a method that combines the SAE features into the attribution generation process, and found that it consistently improved SaCo and Faithfulness Correlation, while producing smaller and more mixed improvements on Pixel Flipping [[2]](#ref-sula). But there are a few limitations with this method, first is having to train a Sparse Autoencoder which takes time and compute. Another one is that the features generated by the SAE are learned in an unsupervised manner; this leaves us second guessing their semantic meaning again when features have no clear characteristics. 
 
-[Example of a feature where it is hard to find common ground]
-
 <figure>
   <img src="assets/jlens/feature-29914-edge-ridge.png" alt="Attribution comparisons and activating examples for SAE Feature 29914, whose responses span edges, ridges, and color transitions without a clear semantic label.">
   <figcaption>Figure 2. Feature 29914 (layer 7) responds to low-level edge structures and color transitions across otherwise unrelated images, making a single semantic interpretation difficult. From Šula et al. <a href="#ref-sula">[2]</a>.</figcaption>
 </figure>
 
-## Jlens and how it connects to vision
-A spiritual continuation of the logit lens approach, the Jacobian lens (J-lens) is a method developed by Anthropic and was used in their technical report to find evidence of a global workspace [citation to the jlens]. In their language-model experiments, it seems to hint at a special phenomenon where intermediate representations can not only be decoded into verbalizable concepts, but a small privileged component of these representations is also causally involved in downstream computation. We use their lens construction, but do not assume that vision models contain the same privileged sparse J-space. To understand what exactly is happening here, we need two pieces:
-[formula for the jlens vector]
+## JLens and how it connects to vision
+A spiritual continuation of the logit lens approach, the Jacobian lens (J-lens) is a method developed by Anthropic and was used in their technical report to find evidence of a global workspace [[3]](#ref-jlens). In their language-model experiments, it seems to hint at a special phenomenon where intermediate representations can not only be decoded into verbalizable concepts, but a small privileged component of these representations is also causally involved in downstream computation. We use their lens construction, but do not assume that vision models contain the same privileged sparse J-space. To understand what exactly is happening here, we need two pieces:
 
 $$
 \mathbf{J}_{\ell}
@@ -79,8 +76,6 @@ $$
 \left(\mathbf{W}_{U}\mathbf{J}_{\ell}\right)_{w,:}
 \tag{4}
 $$
-
-[formula for the jlens score]
 
 $$
 s_{\ell,w}\!\left(\mathbf{h}_{\ell,t}\right)
@@ -168,23 +163,65 @@ s_{\ell,p,c}(x)
 \tag{10}
 $$
 
-[Codex addition: The results reported below use exactly this uncentered score. Subtracting the fit-set mean activation, \(\langle\mathbf{h}_{\ell,p}-\boldsymbol\mu_\ell,\mathbf{v}_{\ell,c}\rangle\), leaves the within-image spatial correlation unchanged but changes cross-class calibration. In our comparison it reduced recurring class priors and slightly improved target-class ranks. The centered and uncentered results should therefore be reported as separate protocols rather than mixed.]
-
 We fitted \(\mathbf{J}_9^{\mathrm{ViT}}\) on 9,993 ImageNet training images. The evaluation below used 10,000 class-balanced ImageNet validation images that were disjoint from the fit set. The frozen model's accuracy on this evaluation sample was 64.67%, but all semantic-alignment measurements use the model's own prediction as the target rather than the ground-truth class. This lets the experiment ask whether JLens explains the model's decision even when that decision is wrong.
 
+### Case Studies: Understanding Attribution via JLens Readouts
+
+To see how JLens vectors enrich conventional attribution maps, we can examine both a success case where JLens disambiguates competing concepts and a failure case where JLens diagnoses the likely semantic distractor that misled the model.
+
+#### Disambiguating Evidence: Why the Head Stabilizes the Prediction
+
+In our first example (Figure 3), the model correctly classifies the image as **chimpanzee** with moderate confidence (~0.50), with **baboon** as the runner-up.
+
+<figure>
+  <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; max-width: 650px;">
+    <img src="assets/jlens/chimp-1-original.png" alt="Original model input of a chimpanzee">
+    <img src="assets/jlens/chimp-2-attribution.png" alt="TransLRP attribution heatmap overlay">
+    <img src="assets/jlens/chimp-3-head-patches.png" alt="Head patches (9, 10, 17) highlighted">
+    <img src="assets/jlens/chimp-4-torso-patches.png" alt="Torso patches (16, 23, 24, 30, 31, 38) highlighted">
+  </div>
+  <figcaption>Figure 3. Semantic decomposition of evidence for a correct <i>chimpanzee</i> prediction (runner-up: <i>baboon</i>). (Top-left) Original model input. (Top-right) Vanilla TransLRP attribution map with a turbo overlay. (Bottom-left) Head patches (9, 10, 17) where attribution concentrates (mean 0.060) and <i>chimpanzee</i> dominates (mean rank #2.3). (Bottom-right) Torso patches (16, 23, 24, 30, 31, 38) where attribution is lower (mean 0.037) and decoded semantics are ambiguous across primate classes (mean rank #8.3).</figcaption>
+</figure>
+
+Standard TransLRP attribution (top-right) indicates that while the entire animal contributes to the decision, the strongest attribution hotspot is located on the face and head. Inspecting the layer-9 JLens readouts suggests the internal reason for this split:
+
+1. **Torso patches (bottom-right):** The dark, shaggy body fur produces semantic ambiguity across closely related primate classes. Averaged over all torso patches, the top decoded concepts are *howler monkey* (+0.363), *siamang* (+0.340), *gorilla* (+0.335), *chimpanzee* (+0.315, #4), and *baboon* (+0.311, #7). In fact, patch 24 (the chest) decodes *baboon* as #1. Across the torso, the true class achieves only a lower mean rank of #8.3.
+2. **Head patches (bottom-left):** In contrast, the facial region receives ~60% stronger attribution (mean 0.060 vs 0.037) and cleanly resolves this ambiguity. Here, *chimpanzee* decisively claims rank #1 (mean rank #2.3 across head patches, with patch 10 on the face ranking *chimpanzee* #1 directly).
+
+The JLens readouts suggest that the model's decision is not uniformly distributed: the body provides generic primate evidence that leaves *baboon* in close contention, while the facial features provide the specific evidence that tips the final prediction to *chimpanzee*.
+
+#### Diagnosing Model Failures: Distractor Evidence and Error Analysis
+
+JLens is equally informative when the model fails. In Figure 4, the ground truth is **Tibetan terrier**, but the model incorrectly predicts **hotdog** (confidence ~0.86, runner-up *Tibetan terrier*).
+
+<figure>
+  <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; max-width: 650px;">
+    <img src="assets/jlens/hotdog-1-original.png" alt="Original model input with a Tibetan terrier and a foot-shaped plastic toy">
+    <img src="assets/jlens/hotdog-2-attribution.png" alt="TransLRP attribution heatmap overlay">
+    <img src="assets/jlens/hotdog-3-dog-patches.png" alt="Dog patches (8, 9, 10, 17) highlighted">
+    <img src="assets/jlens/hotdog-4-foot-patches.png" alt="Toy patches (37, 38, 39, 44, 45) highlighted">
+  </div>
+  <figcaption>Figure 4. Diagnosing a classification error where ground truth is <i>Tibetan terrier</i> but the model predicted <i>hotdog</i>. (Top-left) Original model input. (Top-right) TransLRP attribution map showing attribution concentrated over the toy. (Bottom-left) Dog patches (8, 9, 10, 17) where <i>Tibetan terrier</i> is correctly recognized (mean rank #1.2) but receives lower attribution (0.039). (Bottom-right) Toy patches (37, 38, 39, 44, 45) which dominate attribution (0.087) and decode as smooth, oblong fleshy/food objects (<i>hotdog</i> mean rank #9.0, aggregate #1).</figcaption>
+</figure>
+
+Conventional attribution (top-right) shows that the model shifted almost all of its focus away from the dog and onto the plastic foot-shaped dog toy on the floor (mean attribution of 0.087 on the toy vs. 0.039 on the dog). Saliency maps alone can show *that* the model looked at the toy, but they cannot explain *why* looking at a plastic foot resulted in the label *hotdog*. JLens decodes the underlying semantic representation:
+
+1. **Dog patches (bottom-left):** The model's representation over the dog itself is largely intact. The layer-9 JLens readouts over patches 8, 9, 10, and 17 unanimously decode as fluffy dog breeds, with *Tibetan terrier* ranking #1 on three patches (mean rank #1.2, while *hotdog* is at rank #281.5).
+2. **Toy patches (bottom-right):** Averaging the JLens readout across the toy region (patches 37, 38, 39, 44, 45) suggests that CLIP interpreted the smooth, pinkish, oblong shape as a cluster of fleshy, rubbery, and food-like objects: *hotdog* (+0.300, #1), *butternut squash* (+0.271, #2), *Band Aid* (+0.251, #3), *rubber eraser* (+0.232, #4), and *clog* (+0.213, #7), alongside specific footwear labels (sandal, running shoe) concentrated on the painted toenails of patch 39.
+
+This semantic breakdown plausibly explains the failure mode: the model correctly recognized the dog, but the distractor toy produced an even stronger set of food/rubber activations that overwhelmed the dog's logits at the output layer. JLens provides the missing vocabulary to turn an unexplained attribution hotspot into a concrete diagnostic hypothesis.
+
 ## Results
-What we found is that JLens seems to be well-aligned with attribution, and therefore poses a promising way of interpreting attribution patterns. For the top 5 patches with the highest attribution value, the prediction made by the model was in the top 10 of the JLens readout 53.24% of the time, compared with 25.35% for random patches and 13.36% for the least attributed patches. Under a fixed random reassignment of class labels, the top-patch rate was only 0.87%. When aggregating the five patch readouts before ranking the classes, the corresponding rates were 81.41% for the highest-attribution group, 45.60% for random patches, and 18.93% for the lowest-attribution group.
+What we found is that JLens seems to be well-aligned with attribution, and therefore offers a promising way of interpreting attribution patterns. For the top 5 patches with the highest attribution value, the prediction made by the model was in the top 10 of the JLens readout 53.24% of the time, compared with 25.35% for random patches and 13.36% for the least attributed patches. Under a fixed random reassignment of class labels, the top-patch rate was only 0.87%. When aggregating the five patch readouts before ranking the classes, the corresponding rates were 81.41% for the highest-attribution group, 45.60% for random patches, and 18.93% for the lowest-attribution group.
 
 Across all 49 patches and 10,000 validation images, the mean within-image Spearman correlation between vanilla TransLRP attribution and the predicted-class JLens score was 0.3123, with a 95% confidence interval of 0.3074–0.3172 and a median of 0.3409. The correlation was positive in 88.23% of images. Thus the relationship is moderate rather than a reconstruction of the attribution map, but it is highly consistent across images.
 
 At layer 9, there is also evidence that both local and global information plays a role. Adjacent patches had 16.3% exact top-concept agreement and mean readout-vector cosine 0.305. Far-apart patches had 4.9% agreement and cosine 0.171, while patches drawn from different images had only 0.75% agreement and cosine 0.104. The decline with distance suggests that the readout retains local spatial structure. At the same time, the least-attributed patches still placed the predicted class in their top 10 substantially more often than the roughly 1% shuffled-label baseline, consistent with image-wide information being mixed into late patch representations. These measurements cannot determine whether a concept was computed locally or imported from elsewhere through attention.
 
-The biggest advantage JLens vectors have is that they are aligned with a predefined, human-readable, output-aligned vocabulary grounded in CLIP's native text embedding space. The two lenses related very differently to attribution: the predicted-class JLens score had a mean spatial correlation of +0.3123 with attribution, whereas the direct patch logit-lens score had a correlation of -0.3951. Only 7.71% of images had a positive logit-lens correlation. This does not show that logit lens is generally ineffective: the final CLIP decoder is trained on the final CLS representation, so applying it directly to an intermediate patch token is an off-distribution forced decoding. JLens is better matched to this particular attribution question because its class directions are transported into the layer-9 patch space. In a separate 1,000-image audit, the complete 1,000-class score vectors of JLens and the final patch logit lens had mean correlation of approximately -0.405 at highly attributed locations.
-
-[Codex addition: The strongest causal result from the earlier, more extensive worktree should be kept conceptually separate because it used a centered target-versus-runner JLens rather than the uncentered 1,000-class readout above. On 2,000 fresh images and 98,000 single-patch interventions, the target-versus-runner JLens had mean Spearman correlation 0.1659 with causal margin effects, compared with 0.1128 for gated TransLRP, 0.0843 for vanilla TransLRP, 0.0035 for a coordinate-shuffled JLens map, and -0.0019 for a wrong-class map. After controlling for both attribution maps and the semantic controls, the real JLens term remained positive in 1,580 of 2,000 images. This is evidence that JLens can add class-specific explanatory information beyond merely restating an attribution map, but it is a distinct experiment and should receive its own methodological description if included in the final post.]
+The biggest advantage JLens vectors have is that they are aligned with a predefined, human-readable, output-aligned vocabulary grounded in CLIP's native text embedding space. On the same layer-9 patch residuals, the predicted-class JLens score correlated positively with attribution (+0.3123), while the logit-lens score correlated negatively (-0.3951); among the five most-attributed patches, the predicted class ranked 105th on average with JLens but 833rd with logit-lens decoding (lower is better). The difference is in the question each lens asks: logit lens asks what a patch would predict if it were already a final CLS representation, whereas JLens transports the predicted-class direction back through the downstream patch-to-CLS computation and is therefore better matched to explaining how an attributed region contributed to the final prediction.
 
 ## Limitations
-The semantic readout is currently limited to the 1000 ImageNet classes, and leaves only a fairly granular read on the intermediate token representations. For instance, “green mamba” frequently appears as the nearest available label for green regions, although this partly reflects the restricted ImageNet vocabulary and the calibration of the uncentered readout. It should therefore be treated as a ranked semantic hypothesis, not a literal inventory of what is inside the corresponding image square. CLIP is capable of supporting more semantic readouts but this would necessitate building a representative dictionary; this was left for the future.
+The semantic readout is currently limited to the 1000 ImageNet classes, and leaves only a fairly granular read on the intermediate token representations. For instance, “green mamba” frequently appears as the nearest available label for green regions, although this partly reflects the restricted ImageNet vocabulary and the calibration of the readout. It should therefore be treated as a ranked semantic hypothesis, not a literal inventory of what is inside the corresponding image square. CLIP is capable of supporting more semantic readouts but this would necessitate building a representative dictionary; this was left for the future.
 
 Another limitation is that using JLens directly as an attribution method did not consistently improve results across metrics. Some configurations improved Pixel Flipping while regressing on Faithfulness Correlation and SaCo, and rank fusion also improved some patch-ordering results. Its clearest current role is consequently as a semantic explanation and auditing layer over an attribution map, not as a replacement attribution method. Since this method is not very well researched in vision models yet, I am confident that possible advances could be made in the future.
 
@@ -197,3 +234,4 @@ Finally, the present experiment establishes systematic alignment and supplies us
 2. <span id="ref-sula"></span>Julius Šula, Thomas Lukasiewicz, and Bayar Menzat. “Faithful Attribution in Vision Transformers via Feature-Gradient Gating.” *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW)*, 2026, pp. 4178–4182. [Open-access paper](https://openaccess.thecvf.com/content/CVPR2026W/HOW/papers/Sula_Faithful_Attribution_in_Vision_Transformers_via_Feature-Gradient_Gating_CVPRW_2026_paper.pdf).
 
 3. <span id="ref-jlens"></span>Wes Gurnee et al. “Verbalizable Representations Form a Global Workspace in Language Models.” *Transformer Circuits Thread*, Anthropic, 6 July 2026. [Technical report](https://transformer-circuits.pub/2026/workspace/).
+

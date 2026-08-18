@@ -325,6 +325,50 @@ a {
   white-space: nowrap;
 }
 
+.pub-list {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--border);
+  list-style: none;
+}
+
+.pub-list li {
+  border-bottom: 1px solid var(--border);
+  padding: 1.1rem 0;
+}
+
+.pub-title {
+  margin: 0;
+}
+
+.pub-title a {
+  color: var(--text-strong);
+  font-size: 1.05rem;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 150ms ease, border-bottom-color 150ms ease;
+}
+
+.pub-title a:hover {
+  color: var(--purple-bright);
+  border-bottom-color: var(--purple-bright);
+}
+
+.pub-meta {
+  margin: 0.35rem 0 0;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+
+.pub-meta a {
+  color: var(--purple-bright);
+  text-decoration: none;
+}
+
+.pub-meta a:hover {
+  color: var(--gold-bright);
+}
+
 .about-intro {
   margin-bottom: 2.2rem;
 }

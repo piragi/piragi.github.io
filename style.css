@@ -445,6 +445,93 @@ a {
   font-size: 0.65rem;
 }
 
+.post-body h4 {
+  margin: 1.75rem 0 0.75rem;
+  color: var(--text-strong);
+  font-family: var(--display);
+  font-size: 0.58rem;
+  line-height: 1.7;
+}
+
+.post-body figure {
+  margin: 2.25rem 0;
+}
+
+.post-body figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.post-body figcaption {
+  margin-top: 0.75rem;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.figure-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  max-width: 650px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  margin: 1.8rem 0;
+}
+
+.post-body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.post-body th,
+.post-body td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.post-body th {
+  color: var(--gold-bright);
+  font-family: var(--display);
+  font-size: 0.65rem;
+  text-align: left;
+  background: var(--surface);
+}
+
+.post-body th:nth-child(n+2),
+.post-body td:nth-child(n+2) {
+  text-align: right;
+}
+
+.post-body tr:last-child td {
+  border-bottom: none;
+}
+
+.citation {
+  font-family: var(--mono);
+  font-size: 0.82em;
+  white-space: nowrap;
+}
+
+.references {
+  font-size: 0.93rem;
+  line-height: 1.65;
+}
+
+.references li {
+  margin-bottom: 1rem;
+}
+
 .post-body a {
   color: var(--gold-bright);
   text-decoration-thickness: 1px;

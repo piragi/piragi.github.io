@@ -133,11 +133,11 @@ $$
 
 I fitted \(\mathbf{J}_9^{\mathrm{ViT}}\) on 9,993 ImageNet training images. The evaluation below used 10,000 class-balanced ImageNet validation images that were disjoint from the fit set. The frozen model's accuracy on this evaluation sample was 64.67%, but all semantic-alignment measurements use the model's own prediction as the target rather than the ground-truth class. This lets the experiment ask whether JLens explains the model's decision even when that decision is wrong.
 
-### Case Studies: Understanding Attribution via JLens Readouts
+### Case study
 
 To see how JLens vectors extend conventional attribution maps, we can examine both a success case where JLens disambiguates competing concepts and a failure case where JLens diagnoses the likely semantic distraction that misled the model.
 
-#### Disambiguating Evidence: Why the Head Stabilizes the Prediction
+#### Example of Progressive Evidence
 
 In the first example (Figure 3), the model correctly classifies the image as **chimpanzee** with moderate confidence (~0.50), with **baboon** as the runner-up.
 
@@ -158,7 +158,7 @@ Standard TransLRP attribution (top-right) indicates that while the entire animal
 
 The JLens readouts suggest that the model's decision is not uniformly distributed: the body provides generic primate evidence that leaves *baboon* in close contention, while the facial features provide the specific evidence that tips the final prediction to *chimpanzee*.
 
-#### Diagnosing Model Failures: Distractor Evidence and Error Analysis
+#### Distraction in the Image
 
 JLens is equally informative when the model fails. In Figure 4, the ground truth is **Tibetan terrier**, but the model incorrectly predicts **hotdog** (confidence ~0.86, runner-up *Tibetan terrier*).
 

@@ -250,7 +250,7 @@ a {
   align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 0.55rem;
+  margin-bottom: 0.35rem;
 }
 
 .site-main > section + section {
@@ -289,7 +289,7 @@ a {
   gap: 2rem;
   align-items: center;
   margin-inline: -1rem;
-  padding: 1rem 1rem;
+  padding: 0.75rem 1rem;
   text-decoration: none;
   transition: background-color 150ms ease, padding-left 150ms ease;
 }
@@ -339,7 +339,7 @@ a {
 
 .pub-list li {
   border-bottom: 1px solid var(--border);
-  padding: 0.85rem 0;
+  padding: 0.6rem 0;
 }
 
 .pub-title {

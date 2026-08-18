@@ -253,7 +253,12 @@ a {
   margin-bottom: 0.9rem;
 }
 
-.section-heading h1 {
+.site-main > section + section {
+  margin-top: 3.5rem;
+}
+
+.section-heading h1,
+.section-heading h2 {
   margin: 0;
   color: var(--gold-bright);
   font-family: var(--display);

@@ -408,8 +408,33 @@ a {
 .profile-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 1.25rem;
-  margin-bottom: 1.4rem;
+  align-items: center;
+  gap: 0.25rem 1.5rem;
+  margin-top: -0.35rem;
+}
+
+.profile-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding-block: 0.4rem;
+  color: var(--purple-bright);
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+.profile-links a span {
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+
+.profile-links a:hover,
+.profile-links a:focus-visible {
+  color: var(--gold-bright);
 }
 
 .post-body h2,
